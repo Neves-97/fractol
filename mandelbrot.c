@@ -17,14 +17,14 @@ int	iterate_mandelbrot(t_complex *c, t_complex *z)
 void	mandelbrot(t_data *data)
 {
     int i = 0;
-    while (i < WINDOW_WIDTH)
+    while (i < W_W)
     {
         int j = 0;
-        while (j < WINDOW_WIDTH)
+        while (j < W_W)
         {
             t_complex c = {
-                (i - WINDOW_WIDTH / 2.0) * data->zoom / WINDOW_WIDTH + data->off_x,
-                (j - WINDOW_WIDTH / 2.0) * data->zoom / WINDOW_WIDTH + data->off_y
+                (i - W_W / 2.0) * data->zoom / W_W + data->off_x,
+                (j - W_W / 2.0) * data->zoom / W_W + data->off_y
             };
             t_complex z = {0, 0};
             int n = iterate_mandelbrot(&c, &z);

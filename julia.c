@@ -6,7 +6,7 @@
 /*   By: neves <neves@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:14:37 by neves             #+#    #+#             */
-/*   Updated: 2023/04/10 11:14:38 by neves            ###   ########.fr       */
+/*   Updated: 2023/04/10 19:46:41 by neves            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ void julia(t_data *data)
 {
     t_complex c = { data->julia_re, data->julia_im };
     int i = 0;
-    while (i < WINDOW_WIDTH)
+    while (i < W_W)
     {
         int j = 0;
-        while (j < WINDOW_WIDTH)
+        while (j < W_W)
         {
             t_complex z = {
-                (i - WINDOW_WIDTH / 2.0) * data->zoom / WINDOW_WIDTH + data->off_x,
-                (j - WINDOW_WIDTH / 2.0) * data->zoom / WINDOW_WIDTH + data->off_y
+                (i - W_W / 2.0) * data->zoom / W_W + data->off_x,
+                (j - W_W / 2.0) * data->zoom / W_W + data->off_y
             };
             int n = iterate_julia(c, z);
             if (n < 100)

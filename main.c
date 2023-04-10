@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: neves <neves@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/10 19:47:45 by neves             #+#    #+#             */
+/*   Updated: 2023/04/10 19:49:10 by neves            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 # include "fractol.h"
 
 // t_data *initialize_data()
@@ -23,9 +35,11 @@ t_data *initialize_data()
     t_data *pointer = malloc(sizeof(t_data));
 
     pointer->mlx_ptr = mlx_init();
-    pointer->win_ptr = mlx_new_window(pointer->mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "fractol");
-    pointer->img = mlx_new_image(pointer->mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
-    pointer->addr = mlx_get_data_addr(pointer->img, &pointer->bits_per_pixel, &pointer->line_length, &pointer->endian);
+    pointer->win_ptr = mlx_new_window(pointer->mlx_ptr,
+     W_W, WINDOW_HEIGHT, "fractol");
+    pointer->img = mlx_new_image(pointer->mlx_ptr, W_W, WINDOW_HEIGHT);
+    pointer->addr = mlx_get_data_addr(pointer->img, &pointer->bits_per_pixel,
+     &pointer->line_length, &pointer->endian);
     pointer->zoom = 4.5;
     pointer->off_x = 0.0;
     pointer->off_y = 0.0;
@@ -46,9 +60,9 @@ t_data *initialize_data()
 //     }
 //     arg_parser(ac, av, data);
 //     data->mlx_ptr = mlx_init();
-//     data->win_ptr = mlx_new_window(data->mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "fractol");
+//     data->win_ptr = mlx_new_window(data->mlx_ptr, W_W, WINDOW_HEIGHT, "fractol");
     
-//     data->img = mlx_new_image(data->mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
+//     data->img = mlx_new_image(data->mlx_ptr, W_W, WINDOW_HEIGHT);
 //     if (!data->img)
 //     {
 //         printf("Error: Failed to create image.\n");
@@ -56,7 +70,7 @@ t_data *initialize_data()
 //     }
 //     data->addr = mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian);
 
-//     // data->img = mlx_new_image(data->mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
+//     // data->img = mlx_new_image(data->mlx_ptr, W_W, WINDOW_HEIGHT);
 //     // data->addr = mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian);
 //     // Fill the image with the fractal
 //     mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img, 0, 0);
