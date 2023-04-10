@@ -1,8 +1,7 @@
 NAME	:=	fractol
 
 CC		:=	gcc
-CFLAGS	:= 	-O3 -g 
-# -Wall -Wextra -Werror
+CFLAGS	:= 	-Wall -Wextra -Werror -O3 -g -I$(PATH_INCLUDES) -Imlx_linux -D_REENTRANT
 
 PATH_SRC		:=	./
 PATH_INCLUDES	:=	./incs
@@ -10,7 +9,14 @@ PATH_BUILD		:= ./build
 PATH_OBJS		:= $(PATH_BUILD)/objs
 
 SRCS			:=	$(PATH_SRC)/main.c \
-
+					$(PATH_SRC)/events.c \
+					$(PATH_SRC)/arg_parser.c \
+					$(PATH_SRC)/fractol_utils.c \
+					$(PATH_SRC)/mandelbrot.c\
+					$(PATH_SRC)/julia.c\
+					$(PATH_SRC)/burning_ship.c\
+					$(PATH_SRC)/mouse.c\
+					$(PATH_SRC)/color.c\
 
 
 OBJ				:= $(subst .c,.o,$(subst $(PATH_SRC), $(PATH_OBJS), $(SRCS)))
@@ -39,3 +45,7 @@ fclean: clean
 		@rm -rf $(PATH_BUILD) $(NAME)
 
 re: fclean all
+
+
+
+

@@ -1,144 +1,108 @@
-#include "fractol.h"
+# include "fractol.h"
 
-#define WINDOW_WIDTH 600
-#define WINDOW_HEIGHT 300
+// t_data *initialize_data()
+// {
+//     t_data *pointer = malloc(sizeof(t_data));
 
-#define MLX_ERROR 1
+//     pointer->img = NULL;
+//     pointer->addr = NULL;
+//     pointer->bits_per_pixel = 0;
+//     pointer->line_length = 0;
+//     pointer->endian = 0;
+//     pointer->zoom = 4;
+//     pointer->off_x = 0.0;
+//     pointer->off_y = 0.0;
+    
+//     return pointer;
+// }
 
-#define RED_PIXEL 0xFF0000
-#define GREEN_PIXEL 0xFF00
-#define WHITE_PIXEL 0xFFFFFF
 
-typedef struct s_img
+t_data *initialize_data()
 {
-	void	*mlx_img;
-	char	*addr;
-	int		bpp; /* bits per pixel */
-	int		line_len;
-	int		endian;
-}	t_img;
+    t_data *pointer = malloc(sizeof(t_data));
 
-typedef struct s_data
-{
-	void	*mlx_ptr;
-	void	*win_ptr;
-	t_img	img;
-	int		cur_img;
-}	t_data;
+    pointer->mlx_ptr = NULL;
+    pointer->win_ptr = NULL;
+    pointer->img = NULL;
+    pointer->addr = NULL;
+    pointer->bits_per_pixel = 0;
+    pointer->line_length = 0;
+    pointer->endian = 0;
+    pointer->zoom = 4;
+    pointer->off_x = 0.0;
+    pointer->off_y = 0.0;
 
-typedef struct s_rect
-{
-	int	x;
-	int	y;
-	int width;
-	int height;
-	int color;
-}	t_rect;
-
-void	img_pix_put(t_img *img, int x, int y, int color)
-{
-	char    *pixel;
-	int		i;
-
-	i = img->bpp - 8;
-    pixel = img->addr + (y * img->line_len + x * (img->bpp / 8));
-	while (i >= 0)
-	{
-		/* big endian, MSB is the leftmost bit */
-		if (img->endian != 0)
-			*pixel++ = (color >> i) & 0xFF;
-		/* little endian, LSB is the leftmost bit */
-		else
-			*pixel++ = (color >> (img->bpp - 8 - i)) & 0xFF;
-		i -= 8;
-	}
+    return pointer;
 }
 
-/* The x and y coordinates of the rect corresponds to its upper left corner. */
 
-int render_rect(t_img *img, t_rect rect)
+
+// int main(int ac, char **av)
+// {
+// 	t_data *pointer = initialize_data();
+
+//     int img_width;
+//     int img_height;
+//     (void) av;
+// 	if (ac != 2)
+// 		display_error_msg();
+
+//     pointer->mlx_ptr = mlx_init();
+// 	pointer->win_ptr = mlx_new_window(pointer->mlx_ptr, 800, 800, "fractol");
+//     // pointer->img = mlx_xpm_file_to_image(pointer->mlx_ptr, "/home/neves/Downloads/Screenshot-from-2023-02-27-20-04-23_1.xpm", &img_width, &img_height);
+// 	// mlx_string_put(pointer->mlx_ptr, pointer->win_ptr, 100, 100, 0xFFFFFF, "Use mouse wheel to zoom in/out");
+    
+//     mlx_put_image_to_window(pointer->mlx_ptr, pointer->win_ptr, pointer->img, 0, 0);
+//     mlx_hook(pointer->win_ptr, 4, 0, handle_mouse_scroll, pointer);
+//     mlx_hook(pointer->win_ptr, 5, 0, handle_mouse_scroll, pointer);
+
+//     mlx_hook(pointer->win_ptr, 17, 0, handle_mouse_scroll, pointer);
+
+
+// 	hooks(pointer);
+// 	mlx_loop(pointer->mlx_ptr);
+//     mlx_destroy_image(pointer->mlx_ptr, pointer->img);
+
+// 	free(pointer);
+
+//     return (0);
+// }
+
+int main(int ac, char **av)
 {
-	int	i;
-	int j;
+    t_data *data = initialize_data();
 
-	i = rect.y;
-	while (i < rect.y + rect.height)
-	{
-		j = rect.x;
-		while (j < rect.x + rect.width)
-			img_pix_put(img, j++, i, rect.color);
-		++i;
-	}
-	return (0);
-}
+    (void) av;
+    if (ac != 2)
+    {
+        display_error_msg();
+        return (0);
+    }
+    // arg_parser(ac, av, data);
+    data->mlx_ptr = mlx_init();
+    data->win_ptr = mlx_new_window(data->mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "fractol");
+    
+    data->img = mlx_new_image(data->mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
+    if (!data->img)
+    {
+        printf("Error: Failed to create image.\n");
+        exit(1);
+    }
+    data->addr = mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian);
 
-void	render_background(t_img *img, int color)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < WINDOW_HEIGHT)
-	{
-		j = 0;
-		while (j < WINDOW_WIDTH)
-		{
-			img_pix_put(img, j++, i, color);
-		}
-		++i;
-	}
-}
-
-int	handle_keypress(int keysym, t_data *data)
-{
-	if (keysym == XK_Escape)
-	{
-		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
-		data->win_ptr = NULL;
-	}
-	return (0);
-}
-
-int	render(t_data *data)
-{
-	if (data->win_ptr == NULL)
-		return (1);
-	render_background(&data->img, WHITE_PIXEL);
-	render_rect(&data->img, (t_rect){WINDOW_WIDTH - 100, WINDOW_HEIGHT - 100, 100, 100, GREEN_PIXEL});
-	render_rect(&data->img, (t_rect){0, 0, 100, 100, RED_PIXEL});
-
-	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 0, 0);
-
-	return (0);
-}
-
-int	main(void)
-{
-	t_data	data;
-
-	data.mlx_ptr = mlx_init();
-	if (data.mlx_ptr == NULL)
-		return (MLX_ERROR);
-	data.win_ptr = mlx_new_window(data.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "my window");
-	if (data.win_ptr == NULL)
-	{
-		free(data.win_ptr);
-		return (MLX_ERROR);
-	}
-
-	/* Setup hooks */ 
-	data.img.mlx_img = mlx_new_image(data.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
-	
-	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp,
-			&data.img.line_len, &data.img.endian);
-
-	mlx_loop_hook(data.mlx_ptr, &render, &data);
-	mlx_hook(data.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &data);
-
-	mlx_loop(data.mlx_ptr);
-
-	/* we will exit the loop if there's no window left, and execute this code */
-	mlx_destroy_image(data.mlx_ptr, data.img.mlx_img);
-	mlx_destroy_display(data.mlx_ptr);
-	free(data.mlx_ptr);
+    // data->img = mlx_new_image(data->mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
+    // data->addr = mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian);
+    // Fill the image with the fractal
+    set_julia_params(data, -0.835, 0.232);
+    julia(data);
+    mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img, 0, 0);
+    // mlx_hook(data->win_ptr, 4, 0, mouse_scroll, data);
+    // mlx_hook(data->win_ptr, 5, 0, mouse_scroll, data);
+    // // mlx_hook(data->win_ptr, 17, 0, mouse_scroll, data);
+    hooks(data);
+    mlx_loop(data->mlx_ptr);
+    mlx_destroy_image(data->mlx_ptr, data->img);
+    mlx_destroy_display(data->mlx_ptr);
+    free(data);
+    return (0);
 }
