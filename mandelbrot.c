@@ -29,15 +29,11 @@ void	mandelbrot(t_data *data)
             t_complex z = {0, 0};
             int n = iterate_mandelbrot(&c, &z);
             if (n < 100)
-                my_pixel_put(data, i, j, 0x000101 * n * n + 0x002020 * n + 0x000c0c);
+                my_pixel_put(data, i, j, 0x000101 * n * 0x000f0f);
 
             j++;
         }
         i++;
     }
-
-    // data->zoom *= 0.9;
-    // data->off_x += (WINDOW_WIDTH / 2.0 - data->off_x) * 0.1;
-    // data->off_y += (WINDOW_WIDTH / 2.0 - data->off_y) * 0.1;
 }
 

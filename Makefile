@@ -15,8 +15,7 @@ SRCS			:=	$(PATH_SRC)/main.c \
 					$(PATH_SRC)/mandelbrot.c\
 					$(PATH_SRC)/julia.c\
 					$(PATH_SRC)/burning_ship.c\
-					$(PATH_SRC)/mouse.c\
-					$(PATH_SRC)/color.c\
+					$(PATH_SRC)/draw.c\
 
 
 OBJ				:= $(subst .c,.o,$(subst $(PATH_SRC), $(PATH_OBJS), $(SRCS)))

@@ -20,8 +20,8 @@
 # define MOUSE_LEFT_CLICK 1
 # define MOUSE_WHEEL_UP 4
 # define MOUSE_WHEEL_DOWN 5
-#define WINDOW_WIDTH 900
-#define WINDOW_HEIGHT 900
+#define W_W 1200
+#define WINDOW_HEIGHT 1200
 #define EXIT exit(0)
 #define MLX_ERROR 1
 #define Destroy_Notify 17
@@ -59,6 +59,7 @@ typedef struct	s_data
 	double	off_y;
 	double	julia_re;
 	double	julia_im;
+	int		fractal_type;
 }	t_data;
 
 typedef struct		s_complex
@@ -72,6 +73,8 @@ typedef struct s_vars
 	t_data *img;
 
 } t_vars;
+
+void    free_data(t_data *data);
 
 int display_error_msg(void);
 
@@ -106,11 +109,15 @@ void	zoom_out(t_vars *vars, int x, int y);
 int	handle_mouse_scroll(int button, int x, int y, t_vars *vars);
 
 
-void draw_fractal(t_data *data);
+// void draw_fractal(t_data *data);
+
+void draw_fractal(int fractal_type, t_data *data);
+
 
 // agr parser
 
-void display_fractal(const char *fractal_name, t_data *data);
+// void display_fractal(char **av, t_data *data);
+
 int arg_parser(int ac, char **av, t_data *data);
 
 #endif
