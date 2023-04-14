@@ -16,6 +16,8 @@ SRCS			:=	$(PATH_SRC)/main.c \
 					$(PATH_SRC)/julia.c\
 					$(PATH_SRC)/burning_ship.c\
 					$(PATH_SRC)/draw.c\
+					
+
 
 
 OBJ				:= $(subst .c,.o,$(subst $(PATH_SRC), $(PATH_OBJS), $(SRCS)))
@@ -44,7 +46,3 @@ fclean: clean
 		@rm -rf $(PATH_BUILD) $(NAME)
 
 re: fclean all
-
-
-
-

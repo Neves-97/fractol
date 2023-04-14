@@ -1,39 +1,54 @@
-#include "fractol.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mandelbrot.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: roda-min <roda-min@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/11 10:46:09 by roda-min          #+#    #+#             */
+/*   Updated: 2023/04/14 11:33:12 by roda-min         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "fractol.h"
 
 int	iterate_mandelbrot(t_complex *c, t_complex *z)
 {
-    int n = 0;
-    while (n < 100 && z->re * z->re + z->im * z->im < 4)
-    {
-        double temp_re = z->re * z->re - z->im * z->im + c->re;
-        z->im = 2 * z->re * z->im + c->im;
-        z->re = temp_re;
-        n++;
-    }
-    return n;
+	int		n;
+	double	temp_re;
+
+	n = 0;
+	while (n < 100 && z->re * z->re + z->im * z->im < 4)
+	{
+		temp_re = z->re * z->re - z->im * z->im + c->re;
+		z->im = 2 * z->re * z->im + c->im;
+		z->re = temp_re;
+		n++;
+	}
+	return (n);
 }
 
 void	mandelbrot(t_data *data)
 {
-    int i = 0;
-    while (i < W_W)
-    {
-        int j = 0;
-        while (j < W_W)
-        {
-            t_complex c = {
-                (i - W_W / 2.0) * data->zoom / W_W + data->off_x,
-                (j - W_W / 2.0) * data->zoom / W_W + data->off_y
-            };
-            t_complex z = {0, 0};
-            int n = iterate_mandelbrot(&c, &z);
-            if (n < 100)
-                my_pixel_put(data, i, j, 0x000101 * n * 0x000f0f);
+	int			i;
+	int			j;
+	int			n;
+	t_complex	c;
+	t_complex	z;
 
-            j++;
-        }
-        i++;
-    }
+	i = 0;
+	while (i < W_W)
+	{
+		j = 0;
+		while (j < W_W)
+		{
+			c = calculate_c(i, j, data);
+			z = (t_complex){0, 0};
+			n = iterate_mandelbrot(&c, &z);
+			if (n < 100)
+				my_pixel_put(data, i, j, 0x000101 * n * 0x000f0f);
+			j++;
+		}
+		i++;
+	}
 }
-
